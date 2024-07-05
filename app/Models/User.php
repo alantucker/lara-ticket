@@ -47,6 +47,9 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Get the tickets associated with the user.
+     */
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'owner_id');
