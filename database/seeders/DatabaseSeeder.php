@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Reply;
 use App\Models\Ticket;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -19,11 +20,17 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        $users = User::factory(100)->create();
+        User::factory(25)->create();
 
-        foreach ($users as $user) {
-            if ($user->role === 'user') {
-                Ticket::factory()->create(['owner_id' => $user->id]);
+        $randomUsers = User::getRandomUsers(5);
+
+        foreach ($randomUsers as $user) {
+            $ticket = Ticket::factory()->create(['owner_id' => $user->id]);
+            $replies = Reply::factory(1)->create(['user_id' => $user->id, 'ticket_id' => $ticket->id]);
+
+            foreach ($replies as $reply) {
+                $ticket->status = 'open';
+                $ticket->save();
             }
         }
 
