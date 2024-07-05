@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -34,6 +35,15 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    /**
+     * Get a random number of users from the database.
+     */
+    public static function getRandomUsers($number = 1)
+    {
+        return self::inRandomOrder()->take($number)->get();
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -54,4 +64,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class, 'owner_id');
     }
+
+
+
+
 }
