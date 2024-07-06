@@ -12,7 +12,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        //
+        return view('tickets.index');
     }
 
     /**
@@ -28,7 +28,14 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $ticket = new Ticket();
+        $ticket->subject = $request->subject;
+        $ticket->body = $request->body;
+        $ticket->owner_id = $request->owner_id;
+        $ticket->category_id = $request->category_id;
+        $ticket->save();
+
+        return redirect('/tickets')->with('success', 'The ticket has been successfully created.');
     }
 
     /**
