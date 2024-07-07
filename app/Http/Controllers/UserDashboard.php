@@ -13,7 +13,7 @@ class UserDashboard extends Controller
      */
     public function __invoke(Request $request)
     {
-        $tickets = Ticket::where('owner_id', Auth::id())->orderByDesc('priority')->paginate(3);
+        $tickets = Ticket::where('owner_id', Auth::id())->orderByDesc('priority')->paginate(10);
 
         return view('dashboard', ['tickets' => $tickets]);
     }
