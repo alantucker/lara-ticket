@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(25)->create();
 
-        Category::factory(3)->create();
+        Category::factory(7)->create();
 
         $randomUsers = User::getRandomUsers(5);
 
