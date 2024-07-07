@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+.priority-badge-low {
+    @apply bg-gray-100 text-gray-600;
+
+    svg {
+        @apply fill-gray-400;
+    }
+}
+
+.priority-badge-medium {
+    @apply bg-yellow-100 text-yellow-800;
+
+    svg {
+        @apply fill-yellow-500;
+    }
+}
+
+.priority-badge-high {
+    @apply bg-pink-100 text-pink-700;
+
+    svg {
+        @apply fill-pink-500;
+    }
+}
+
+.priority-badge-urgent {
+    @apply bg-red-100 text-red-700;
+
+    svg {
+        @apply fill-red-500;
+    }
+}
+
