@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserDashboard;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +19,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/tickets', [TicketController::class, 'index'])->name('ticket.index');
+    Route::get('/tickets/{id}', [TicketController::class, 'show'])->name('ticket.show');
     Route::post('/tickets', [TicketController::class, 'store'])->name('ticket.store');
+
+
+    Route::post('/replies', [ReplyController::class, 'store'])->name('reply.store');
+    Route::get('/replies/create', [ReplyController::class, 'create'])->name('reply.create');
 
 });
 
