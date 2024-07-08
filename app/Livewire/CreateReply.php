@@ -4,6 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Reply;
 use App\Models\Ticket;
+use App\Models\User;
+use App\Notifications\ReplyAdded;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class CreateReply extends Component
@@ -44,6 +47,15 @@ class CreateReply extends Component
         $ticket = Ticket::find($this->ticketId);
 
         $ticket->replies()->save($reply);
+
+        $data = [
+            'ticket_id' => $ticket->id,
+            'ticket_subject' => $ticket->subject,
+            'first_name' => $ticket->user->first_name,
+            'reply_body' => $this->body,
+        ];
+
+        Notification::sendNow(User::find($ticket->owner_id), new ReplyAdded($data));
 
         session()->flash('status', 'Reply successfully added and email sent to the user.');
 
