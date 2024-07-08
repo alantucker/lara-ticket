@@ -10,6 +10,17 @@ class Reply extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'body',
+        'is_private',
+        'user_id',
+    ];
+
 
     /**
      * Get the ticket that owns the reply
@@ -17,6 +28,15 @@ class Reply extends Model
     public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
+    }
+
+
+    /**
+     * Get the user that owns the reply.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
 }
