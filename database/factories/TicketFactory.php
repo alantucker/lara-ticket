@@ -19,7 +19,7 @@ class TicketFactory extends Factory
         return [
             'subject' => $this->faker->sentence(),
             'body' => $this->faker->paragraph(),
-            'category_id' => $this->faker->randomElement([1,2,3]),
+            'category_id' => $this->faker->randomElement([1,2,3,4,5,6,7]),
         ];
     }
 }
