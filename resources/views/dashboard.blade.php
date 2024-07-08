@@ -41,7 +41,7 @@
                                         <dl class="font-normal lg:hidden">
                                             <dt class="sr-only">Priority</dt>
                                             <dd class="mt-1 truncate text-gray-700">
-                                                <x-priority-badge :number=5 />
+                                                <x-priority-badge :number="$ticket->priority" />
                                             </dd>
                                             <dt class="sr-only sm:hidden">Subject</dt>
                                             <dd class="mt-1 truncate text-gray-500 sm:hidden">{{ $ticket->subject }}</dd>
@@ -51,9 +51,9 @@
                                         <x-priority-badge :number="$ticket->priority" />
                                     </td>
                                     <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">{{ $ticket->subject }}</td>
-                                    <td class="px-3 py-4 text-sm text-gray-500">Email</td>
+                                    <td class="px-3 py-4 text-sm text-gray-500">{{ $ticket->category->name }}</td>
                                     <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">View<span class="sr-only">, Lindsay Walton</span></a>
+                                        <a href="{{ route('ticket.show', $ticket->id) }}" class="text-indigo-600 hover:text-indigo-900">View<span class="sr-only">, Lindsay Walton</span></a>
                                     </td>
                                 </tr>
                                 @endforeach
