@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reply;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -41,9 +43,11 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Ticket $ticket)
+    public function show(Ticket $ticket, $id)
     {
-        //
+        $ticket = Ticket::firstWhere(['id' => $id, 'owner_id' => Auth::id()]);
+        $replies = Reply::where('ticket_id', $ticket->id)->get();
+        return view('tickets.show', ['ticket' => $ticket, 'replies' => $replies]);
     }
 
     /**
