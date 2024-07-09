@@ -13,9 +13,12 @@
                 </div>
             </div>
             @if($ticket->status != 'closed')
-            <div class="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-3 sm:space-y-0 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
-                <button type="button" class="inline-flex items-center justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Close Ticket</button>
-            </div>
+                <form action="{{ route('ticket.close', $ticket->id) }}" method="post">
+                    @csrf
+                    <div class="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-3 sm:space-y-0 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
+                        <button type="submit" class="inline-flex items-center justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Close Ticket</button>
+                    </div>
+                </form>
             @endif
         </div>
         <div class="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
@@ -52,7 +55,7 @@
                             </div>
                             <div class="px-4 py-6 sm:px-6">
                                 <ul role="list" class="space-y-8">
-                                    @foreach($replies as $reply)
+                                    @foreach($ticket->replies as $reply)
                                         <li>
                                             <div class="flex space-x-3">
                                                 <div>
@@ -72,13 +75,15 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="bg-gray-50 px-4 py-6 sm:px-6">
-                            <div class="flex space-x-3">
-                                <div class="min-w-0 flex-1">
-                                    <livewire:create-reply :ticketId="$ticket->id" />
+                        @if($ticket->status != 'closed')
+                            <div class="bg-gray-50 px-4 py-6 sm:px-6">
+                                <div class="flex space-x-3">
+                                    <div class="min-w-0 flex-1">
+                                        <livewire:create-reply :ticketId="$ticket->id" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </section>
             </div>
@@ -132,4 +137,33 @@
             </div>
         </div>
     @endif
+    @if(session('closed'))
+        <div aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+            <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+                <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                    <div class="p-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3 w-0 flex-1 pt-0.5">
+                                <p class="text-sm font-medium text-gray-900">Successfully Closed</p>
+                                <p class="mt-1 text-sm text-gray-500">{{ session('closed') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+{{--    @can('view', $ticket)--}}
+{{--        <p>YES</p>--}}
+{{--    @else--}}
+{{--        <p>NO</p>--}}
+{{--    @endcan--}}
+
+
 </x-app-layout>
