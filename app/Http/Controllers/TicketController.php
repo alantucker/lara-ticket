@@ -49,9 +49,12 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Ticket $ticket, $id)
+    public function show(Request $request, Ticket $ticket)
     {
-        $ticket = Ticket::firstWhere(['id' => $id, 'owner_id' => Auth::id()]);
+        $ticket = Ticket::findOrFail($request->id);
+
+        Gate::authorize('view', $ticket);
+
         return view('tickets.show', ['ticket' => $ticket]);
     }
 
@@ -83,12 +86,12 @@ class TicketController extends Controller
     /**
      * Close a ticket.
      */
-    public function close(Ticket $ticket, $id)
+    public function close(Request $request, Ticket $ticket)
     {
-        $ticket = Ticket::firstWhere(['id' => $id]);
+        $ticket = Ticket::findOrFail($request->id);
         $ticket->status = 'closed';
         $ticket->save();
 
-        return redirect('/tickets/' . $id)->with('closed', 'Ticket has been successfully closed.');
+        return redirect('/tickets/' . $request->id)->with('closed', 'Ticket has been successfully closed.');
     }
 }
