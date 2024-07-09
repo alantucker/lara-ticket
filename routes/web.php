@@ -19,9 +19,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/tickets', [TicketController::class, 'index'])->name('ticket.index');
+    Route::get('/tickets/create', [TicketController::class, 'create'])->name('ticket.create');
     Route::get('/tickets/{id}', [TicketController::class, 'show'])->name('ticket.show');
     Route::post('/tickets', [TicketController::class, 'store'])->name('ticket.store');
-
+    Route::post('/tickets/{id}', [TicketController::class, 'close'])->name('ticket.close');
 
     Route::post('/replies', [ReplyController::class, 'store'])->name('reply.store');
     Route::get('/replies/create', [ReplyController::class, 'create'])->name('reply.create');
