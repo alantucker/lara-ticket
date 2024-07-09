@@ -38,7 +38,7 @@ class TicketController extends Controller
         $ticket = new Ticket();
         $ticket->subject = $request->subject;
         $ticket->body = $request->body;
-        $ticket->category_id = $request->category;
+        $ticket->category_id = $request->category_id;
         $ticket->priority = $request->priority;
         $ticket->owner_id = auth()->id();
         $ticket->save();
