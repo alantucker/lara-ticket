@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTicketRequest;
+use App\Models\Category;
 use App\Models\Reply;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class TicketController extends Controller
 {
@@ -22,32 +25,34 @@ class TicketController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+
+        return view('tickets.create', ['categories' => $categories]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTicketRequest $request)
     {
         $ticket = new Ticket();
         $ticket->subject = $request->subject;
         $ticket->body = $request->body;
-        $ticket->owner_id = $request->owner_id;
-        $ticket->category_id = $request->category_id;
+        $ticket->category_id = $request->category;
+        $ticket->priority = $request->priority;
+        $ticket->owner_id = auth()->id();
         $ticket->save();
 
-        return redirect('/tickets')->with('success', 'The ticket has been successfully created.');
+        return redirect('/dashboard')->with('status', 'The ticket has been successfully created.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Ticket $ticket, $id)
+    public function show(Request $request, Ticket $ticket, $id)
     {
         $ticket = Ticket::firstWhere(['id' => $id, 'owner_id' => Auth::id()]);
-        $replies = Reply::where('ticket_id', $ticket->id)->get();
-        return view('tickets.show', ['ticket' => $ticket, 'replies' => $replies]);
+        return view('tickets.show', ['ticket' => $ticket]);
     }
 
     /**
@@ -72,5 +77,18 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket)
     {
         //
+    }
+
+
+    /**
+     * Close a ticket.
+     */
+    public function close(Ticket $ticket, $id)
+    {
+        $ticket = Ticket::firstWhere(['id' => $id]);
+        $ticket->status = 'closed';
+        $ticket->save();
+
+        return redirect('/tickets/' . $id)->with('closed', 'Ticket has been successfully closed.');
     }
 }
