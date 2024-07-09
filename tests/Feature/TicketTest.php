@@ -36,22 +36,23 @@ class TicketTest extends TestCase
      *
      * @return void
      */
-    public function test_authenticated_user_can_create_ticket(): void
+    public function test_authenticated_user_can_create_a_ticket(): void
     {
         $user = User::factory()->create();
-        $category = Category::factory()->create(["id" => 1, "name" => "Bug"]);
+        $category = Category::factory()->create();
+
+        $ticketData = [
+            'category_id' => $category->id,
+            'subject' => $this->faker->sentence(),
+            'body' => $this->faker->text(),
+            'priority' => 1,
+            'owner_id' => $user->id,
+        ];
 
         $this->actingAs($user)
-            ->post('/tickets', [
-                'owner_id' => $user->id,
-                'category_id' => $category->id,
-                'body' => $this->faker->sentence(),
-                'subject' => $this->faker->paragraph(),
-            ]);
+            ->post('/tickets', $ticketData);
 
-        $this->assertDatabaseHas('tickets', [
-            "owner_id" => $user->id,
-            "category_id" => $category->id,
-        ]);
+        $this->assertDatabaseHas('tickets', $ticketData);
     }
+
 }
